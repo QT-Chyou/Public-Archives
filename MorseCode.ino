@@ -1,3 +1,10 @@
+/*
+MORSE CODE TRANSLATOR
+Hi, I've included some comments on each segment to explain each purpose and how they work
+change the variable according to what you want, I've used this because it's confusing and helps me to keep on differentitating things
+- P.S: The Autumn Engineer
+*/
+
 String rem = "";
 const int button = 2;
 int reading = 0;
@@ -7,7 +14,7 @@ String ren = "";
 String period = String(".");
 String dash = String("-");
 
-String morseAlphabet[] = { 
+String morseAlphabet[] = { //Yk what this is (✿╹◡╹)
       ".-", "-...", "-.-.", "-..", ".", "..-.", "--.", "....", "..", ".---", "-.-", 
       ".-..", "--", "-.", "---", ".--.", "--.-", ".-.", "...", "-", "..-", "...-", 
       ".--", "-..-", "-.--", "--.." };
@@ -23,12 +30,12 @@ void setup() {
 
 void loop() {
   reading = digitalRead(button);
-  if (reading == LOW) {
+  if (reading == LOW) { //checks when the button is not pressed
     counter++; bounce = 0;
     delay(10);
   } 
-  else if (reading == HIGH && counter > 0) {
-    if (counter > 20) { rem += dash; }  
+  else if (reading == HIGH && counter > 0) { //checks if the button is not pressed and will check the input 
+    if (counter > 20) { rem += dash; } 
     else if (counter > 1) { rem += period; }  
     Serial.print("Morse: ");
     Serial.println(rem);
@@ -36,28 +43,29 @@ void loop() {
   }
 
   if (reading == HIGH && bounce > 0) {
-    bounce++; wordtimer++;
+    bounce++; wordtimer++; //starts the bouncer for the precedding segment
   }
 
   if (bounce == 30) {
-    if (rem == "") {
+    if (rem == "") { //should add a space, yet to update(✿╹◡╹)..
       ren += " ";
     }
-    for (int i = 0; i < 26; i++) {
+    for (int i = 0; i < 26; i++) { //we iterate on each to find a match and return it
       if (rem == morseAlphabet[i]) {
         Serial.println(alphabet[i]);
         ren += alphabet[i]; rem = "";
         break;  
       } 
     }
-    rem = "";
+    rem = ""; //resets once it did not find a match
   } 
-  //This segment checks if y
+
+  //This segment checks if you paused for a while and then prints out your word
   if (wordtimer == 120) {
     Serial.println(ren);  
     ren = "";
     bounce = 0; 
     wordtimer = 0;
   }
-  delay(10);
+  delay(10); //necessary, to avoid conflicting inputs
 }
